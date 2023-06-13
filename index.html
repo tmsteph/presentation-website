@@ -7,6 +7,17 @@
 
     <head>
         <title>Presentation</title>
+
+        <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            function scrollToSlide(slideId) {
+                document.getElementById(slideId).scrollIntoView({ behavior: 'smooth' });
+            }
+            window.scrollToSlide = scrollToSlide; // Make the function available globally
+        });
+    
+    
+    </script>
     
     </head>
 
@@ -24,14 +35,16 @@
 
 <center>
     
-    <div style =    "max-width:100vw;
+    <div id ="slide1"
+    
+    style =    "max-width:100vw;
                     justify-content: center;
                     height:100vh;
                     background-image: url('./Backgrounds/Intenational\ Background\ 2.jpg');
                     background-repeat: no-repeat;
                     background-size: 100vw 100vh; 
                     background-position: top center ;
-                    
+                    position: relative;
                     " >
             
             <h1 >Presentation Website</h1>
@@ -56,17 +69,26 @@
             <source src= "Greco Reflection Video 5-27-23.mp4" type=video/mp4>
             
         </video>
+        <button style="position:absolute; bottom:2rem; right:2rem; padding:1rem;" onclick="window.scrollToSlide('slide2')">Next slide</button>
+        <button style="position:absolute; bottom:2rem; left:2rem; padding:1rem;" onclick="window.scrollToSlide('slide1')">Previous slide</button>
+
     </div>
 
-<div style =   "padding-top:14;
+<div 
+id="slide2"
+    style =   "padding-top:14;
                 max-width:100vw; 
                 height:100vh; 
                 background-image:url(Backgrounds/Internatonal\ Background.jpg); 
                 background-repeat: no-repeat;
                 background-size: 100vw 100vh; 
                 background-position:top center; 
+                justify-content: center;
                 
-                justify-content: center;">
+                position:relative;
+                "
+                
+            >
 
           <h2 style="padding-top: 18vh;">Slide 2</h2>
 
@@ -79,19 +101,29 @@
           
           " controls> 
           <source src="Tarakwet English Book Discussion.mp4" type=video/mp4>   
+          
         </video>
+
+        <button style= "position:absolute; bottom:2rem; right:2rem; padding:1rem;" onclick="window.scrollToSlide('slide3')">Next slide</button>
+        <button style="position:absolute; bottom:2rem; left:2rem; padding:1rem;" onclick="window.scrollToSlide('slide1')">Previous slide</button>
 
     </div>
 
 
-    <div style = "
+    <div id = "slide3" 
+    
+        style = "
                     margin-top:-2.5rem;
                     max-width:100vw; 
                     height:100vh ;
                     background-image:url(Backgrounds/Internatonal\ Background.jpg); 
                     background-repeat: no-repeat;
                     background-size: 100vw 100vh; 
-                    background-position:top center;">
+                    background-position:top center;
+                    position:relative;
+                    
+                    ">
+
         <h2 style="padding-top:18vh;">Slide 3</h2>
 
         <p>This is a video of a student presenting a book report! </p>
@@ -102,9 +134,15 @@
                         
                         " controls> 
        <source src="Oral Book Report.mp4" type=video/mp4>   
-      </video>
+       
+    </video>
+    
+    <button style="position:absolute; bottom:2rem; right:2rem; padding:1rem;" onclick="window.scrollToSlide('slide4')">Next slide</button>
+    
+    <button style="position:absolute; bottom:2rem; left:2rem; padding:1rem;" onclick="window.scrollToSlide('slide2')">Previous slide</button>
 
-    </div>
+
+</div>
 
 
 
