@@ -8,141 +8,126 @@
     <head>
         <title>Presentation</title>
 
+
+
         <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            function scrollToSlide(slideId) {
-                document.getElementById(slideId).scrollIntoView({ behavior: 'smooth' });
-            }
-            window.scrollToSlide = scrollToSlide; // Make the function available globally
-        });
-    
-    
-    </script> 
+            document.addEventListener('DOMContentLoaded', (event) => {
+                var currentSlide = 0; // Start at the first slide
+                var slides = ['slide1', 'slide2', 'slide3']; // Put the id's of your slides in the order they appear
+                var videoPlayed = false; // Track if the video on the current slide has been played already
+        
+                function goToSlide(slideIndex) {
+    if (slideIndex >= 0 && slideIndex < slides.length) {
+        currentSlide = slideIndex;
+        document.getElementById(slides[currentSlide]).scrollIntoView({ behavior: 'smooth' });
+        
+        // Get all videos on all slides
+        var videos = document.getElementsByTagName('video');
+        for (var i = 0; i < videos.length; i++) {
+            videos[i].pause();
+            videos[i].currentTime = 0; // Reset the video
+        }
+        
+        videoPlayed = false; // Reset the flag
+    }
+}
 
- <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
-        var currentSlide = 0; // Start at the first slide
-        var slides = ['slide1', 'slide2', 'slide3']; // Put the id's of your slides in the order they appear
-        var videoPlayed = false; // Track if the video on the current slide has been played already
-
-        function goToSlide(slideIndex) {
-            if (slideIndex >= 0 && slideIndex < slides.length) {
-                currentSlide = slideIndex;
-                document.getElementById(slides[currentSlide]).scrollIntoView({ behavior: 'smooth' });
-                // Pause all videos
-                var videos = document.querySelectorAll('video');
-                for (var i = 0; i < videos.length; i++) {
-                    videos[i].pause();
+        
+                function nextSlide() {
+                    videoPlayed = false;
+                    goToSlide(currentSlide + 1);
                 }
-                videoPlayed = false; // Reset the flag
-            }
-        }
-
-        function nextSlide() {
-            goToSlide(currentSlide + 1);
-        }
-
-        function prevSlide() {
-            goToSlide(currentSlide - 1);
-        }
-
-        window.addEventListener('keydown', (event) => {
-            switch (event.key) {
-                case 'ArrowRight':
-                case 'Space':
-                case 'Enter':
-                case 'ArrowDown':
-                    event.preventDefault(); 
-                    if (videoPlayed) {
+        
+                function prevSlide() {
+                    goToSlide(currentSlide - 1);
+                }
+        
+               
+                window.addEventListener('wheel', (event) => {
+                    event.preventDefault();
+                    if (event.deltaY > 0) {
                         nextSlide();
-                    } else {
-                        playVideo();
-                    }
-                    break;
-                case 'ArrowLeft':
-                case 'ArrowUp':
-                case 'Backspace':
-                case 'Escape':
-                    event.preventDefault(); 
-                    if (videoPlayed) {
+                    } else if (event.deltaY < 0) {
                         prevSlide();
-                    } else {
-                        playVideo();
                     }
-                    break;
-            }
-        });
 
-        window.addEventListener('wheel', (event) => {
-            event.preventDefault(); 
-            if (event.deltaY > 0) {
+
+                });
+        
+
+                window.addEventListener('keydown', (event) => {
+    switch (event.key) {
+        case 'ArrowRight':
+        case 'Space':
+        case 'Enter':
+        case 'ArrowDown':
+            event.preventDefault();
+            if (videoPlayed) {
+                nextSlide();
+            } else {
+                playVideo();
+            }
+            break;
+        case 'ArrowLeft':
+        case 'ArrowUp':
+        case 'Backspace':
+        case 'Escape':
+            event.preventDefault();
+            prevSlide(); // When moving back, we always navigate to the previous slide
+            break;
+    }
+});
+
+window.addEventListener('mousedown', (event) => {
+    if (document.fullscreenElement === document.documentElement) {
+        switch (event.button) {
+            case 0: // Left click
                 if (videoPlayed) {
                     nextSlide();
                 } else {
                     playVideo();
                 }
-            } else if (event.deltaY < 0) {
-                if (videoPlayed) {
-                    prevSlide();
-                } else {
-                    playVideo();
-                }
-            }
-        });
-
-        window.addEventListener('mousedown', (event) => {
-            if (document.fullscreenElement === document.documentElement) {
-                switch (event.button) {
-                    case 0: // Left click
-                        if (videoPlayed) {
-                            nextSlide();
-                        } else {
-                            playVideo();
-                        }
-                        break;
-                    case 2: // Right click
-                        if (videoPlayed) {
-                            prevSlide();
-                        } else {
-                            playVideo();
-                        }
-                        break;
-                }
-            }
-        });
-
-        function playVideo() {
-            var video = document.getElementById(slides[currentSlide]).querySelector('video');
-            if (video) {
-                video.play();
-                videoPlayed = true;
-            } else {
-                // If no video on the current slide, behave as if it had been played
-                videoPlayed = true;
-            }
+                break;
+            case 2: // Right click
+                prevSlide(); // When moving back, we always navigate to the previous slide
+                break;
         }
+    }
+});
 
-        function openFullscreen() {
-            if (document.documentElement.requestFullscreen) {
-                document.documentElement.requestFullscreen();
-            } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
-                document.documentElement.mozRequestFullScreen();
-            } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-                document.documentElement.webkitRequestFullscreen();
-            } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
-                document.documentElement.msRequestFullscreen();
-            }
-        }
-
-        // Make the functions available globally
-        window.goToSlide = goToSlide;
-        window.nextSlide = nextSlide;
-        window.prevSlide = prevSlide;
-        window.openFullscreen = openFullscreen;
-        window.playVideo = playVideo;
-    });
-</script>
-
+        
+                function playVideo() {
+                    var video = document.getElementById(slides[currentSlide]).querySelector('video');
+                    if (video) {
+                        video.play();
+                        videoPlayed = true;
+                    } else {
+                        // If no video on the current slide, behave as if it had been played
+                        videoPlayed = true;
+                    }
+                }
+        
+                function openFullscreen() {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                        document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+                        document.documentElement.msRequestFullscreen();
+                    }
+                }
+        
+                // Make the functions available globally
+                window.goToSlide = goToSlide;
+                window.nextSlide = nextSlide;
+                window.prevSlide = prevSlide;
+                window.openFullscreen = openFullscreen;
+                window.playVideo = playVideo;
+            });
+        </script>
+        
 
     
     </head>
